@@ -4,7 +4,7 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="container mx-auto py-4 px-10 font-nunito">
+    <div className="container mx-auto p-10 font-nunito">
       <Header />
       <main className="mt-10">
         <BalanceCardList />

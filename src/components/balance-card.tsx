@@ -33,7 +33,7 @@ export default function BalanceCard({
   const IconComponent = iconMap[icon];
 
   return (
-    <Card>
+    <Card className={cn("w-full border-gray-300 shadow-md")}>
       <CardHeader
         className={cn("flex justify-betweenflex items-center justify-between")}
       >
