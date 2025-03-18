@@ -1,6 +1,7 @@
 import BalanceCardList from "./components/balance-card-list";
 import Header from "./components/header";
 import "./App.css";
+import TransactionForm from "./components/transaction-form";
 
 function App() {
   return (
@@ -8,6 +9,9 @@ function App() {
       <Header />
       <main className="mt-10">
         <BalanceCardList />
+        <div>
+          <TransactionForm />
+        </div>
       </main>
     </div>
   );
