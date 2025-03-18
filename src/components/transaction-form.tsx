@@ -43,15 +43,18 @@ export default function TransactionForm() {
   return (
     <Form {...form}>
       <form
-        className={cn("mt-10 w-full flex flex-col gap-6")}
+        className={cn(
+          "mt-10 w-full flex flex-col gap-6 border border-gray-300 p-6 rounded-lg shadow-md",
+        )}
         onSubmit={form.handleSubmit(onSubmit)}
       >
+        <h4 className="text-4xl font-bold">Add Transaction</h4>
         <FormField
           control={form.control}
           name="transactionType"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Transaction Type</FormLabel>
+              <FormLabel className="font-black">Transaction Type</FormLabel>
               <FormControl>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className="w-full">
@@ -71,7 +74,7 @@ export default function TransactionForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel className="font-black">Description</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Description" />
               </FormControl>
@@ -83,7 +86,7 @@ export default function TransactionForm() {
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel className="font-black">Amount</FormLabel>
               <FormControl>
                 <Input type="number" {...field} placeholder="Amount" />
               </FormControl>
@@ -95,7 +98,7 @@ export default function TransactionForm() {
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel className="font-black">Category</FormLabel>
               <FormControl>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className="w-full">
@@ -118,7 +121,7 @@ export default function TransactionForm() {
           name="date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Date</FormLabel>
+              <FormLabel className="font-black">Date</FormLabel>
               <FormControl>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -129,12 +132,14 @@ export default function TransactionForm() {
                         !field.value && "text-muted-foreground",
                       )}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value ? (
-                        format(new Date(field.value), "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
+                      <div className="flex items-center justify-between w-full">
+                        {field.value ? (
+                          format(new Date(field.value), "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="h-4 w-4" />
+                      </div>
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0 bg-white">
