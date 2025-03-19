@@ -33,11 +33,9 @@ export default function BalanceCard({
   const IconComponent = iconMap[icon];
 
   return (
-    <Card className={cn("w-full border-gray-300 shadow-md")}>
-      <CardHeader
-        className={cn("flex justify-betweenflex items-center justify-between")}
-      >
-        <CardTitle className={cn("font-bold text-xl")}>{title}</CardTitle>
+    <Card className="w-full border-gray-300 shadow-md">
+      <CardHeader className="flex justify-betweenflex items-center justify-between">
+        <CardTitle className="font-bold text-xl">{title}</CardTitle>
         <CardDescription>
           <IconComponent
             size={20}
@@ -50,7 +48,7 @@ export default function BalanceCard({
           ${balance.toFixed(2)}
         </p>
       </CardContent>
-      <CardFooter className={cn("mt-[-20px]")}>
+      <CardFooter className="mt-[-20px]">
         <p>{subtitle}</p>
       </CardFooter>
     </Card>

@@ -43,9 +43,7 @@ export default function TransactionForm() {
   return (
     <Form {...form}>
       <form
-        className={cn(
-          "mt-10 w-full flex flex-col gap-6 border border-gray-300 p-6 rounded-lg shadow-md",
-        )}
+        className="w-full flex flex-col gap-6 border border-gray-300 p-6 rounded-lg shadow-md md:w-1/2"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <h4 className="text-4xl font-bold">Add Transaction</h4>
