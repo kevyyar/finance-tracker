@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, Field } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import {
   Select,
@@ -50,7 +50,7 @@ export default function TransactionForm() {
         <FormField
           control={form.control}
           name="transactionType"
-          render={({ field }) => (
+          render={({ field }: Field) => (
             <FormItem>
               <FormLabel className="font-black">Transaction Type</FormLabel>
               <FormControl>
@@ -70,7 +70,7 @@ export default function TransactionForm() {
         <FormField
           control={form.control}
           name="description"
-          render={({ field }) => (
+          render={({ field }: Field) => (
             <FormItem>
               <FormLabel className="font-black">Description</FormLabel>
               <FormControl>
@@ -82,7 +82,7 @@ export default function TransactionForm() {
         <FormField
           control={form.control}
           name="amount"
-          render={({ field }) => (
+          render={({ field }: Field) => (
             <FormItem>
               <FormLabel className="font-black">Amount</FormLabel>
               <FormControl>
@@ -94,7 +94,7 @@ export default function TransactionForm() {
         <FormField
           control={form.control}
           name="category"
-          render={({ field }) => (
+          render={({ field }: Field) => (
             <FormItem>
               <FormLabel className="font-black">Category</FormLabel>
               <FormControl>
@@ -117,7 +117,7 @@ export default function TransactionForm() {
         <FormField
           control={form.control}
           name="date"
-          render={({ field }) => (
+          render={({ field }: Field) => (
             <FormItem>
               <FormLabel className="font-black">Date</FormLabel>
               <FormControl>

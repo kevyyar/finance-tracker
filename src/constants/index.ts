@@ -1,4 +1,6 @@
-export const financeData = [
+import { BalanceCardType } from "@/types";
+
+export const financeData: BalanceCardType[] = [
   {
     id: crypto.randomUUID(),
     title: "Total Balance",

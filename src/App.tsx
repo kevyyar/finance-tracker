@@ -3,13 +3,14 @@ import Header from "./components/header";
 import "./App.css";
 import TransactionForm from "./components/transaction-form";
 import ExpenseChart from "./components/expense-chart";
+import { financeData } from "./constants";
 
 function App() {
   return (
     <div className="container mx-auto p-10 font-nunito">
       <Header />
       <main className="flex flex-col gap-10">
-        <BalanceCardList />
+        <BalanceCardList balances={financeData} />
         <div className="flex flex-col gap-10 text-center md:text-left md:flex-row md:justify-between">
           <ExpenseChart />
           <TransactionForm />

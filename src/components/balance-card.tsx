@@ -7,15 +7,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { BalanceCardType } from "@/types";
 import { ArrowDown, ArrowUp, LucideIcon, Wallet } from "lucide-react";
-
-interface BalanceCardProps {
-  title: string;
-  icon: string;
-  balance: number;
-  balanceColor?: string;
-  subtitle?: string;
-}
 
 const iconMap: Record<string, LucideIcon> = {
   wallet: Wallet,
@@ -29,7 +22,7 @@ export default function BalanceCard({
   balance,
   balanceColor = "text-black",
   subtitle = "Current balance",
-}: BalanceCardProps) {
+}: BalanceCardType) {
   const IconComponent = iconMap[icon];
 
   return (
