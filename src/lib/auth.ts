@@ -2,47 +2,60 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
-  signInWithPopup
+  signInWithPopup,
+  signOut,
 } from "firebase/auth";
 import { auth } from "./firebase";
 import { createUserDocument } from "./firestore";
 
-export const createUser = async(email: string, password: string) => {
+interface UserData {
+  email: string;
+  displayName: string;
+  createdAt: string;
+  lastLogin: string;
+}
+
+export const createUser = async (email: string, password: string) => {
   const userCreds = await createUserWithEmailAndPassword(auth, email, password);
 
+  const now = new Date().toISOString();
+
   // create user doc in firestore
-  await createUserDocument(userCreds.user.uid, {
-    email: userCreds.user.email,
-    createdAt: new Date(),
-    lastLogin: new Date(),
-  })
+  const userData: UserData = {
+    email: userCreds.user.email || email,
+    displayName: userCreds.user.displayName || email.split("@")[0],
+    createdAt: now,
+    lastLogin: now,
+  };
 
+  await createUserDocument(userCreds.user.uid, userData);
   return userCreds;
-}
+};
 
-export const signIn = async(email: string, password: string) => {
+export const signIn = async (email: string, password: string) => {
   const userCreds = await signInWithEmailAndPassword(auth, email, password);
-
-  // update last login
-  await createUserDocument(userCreds.user.uid, {
-    email: userCreds.user.email,
-    createdAt: new Date(),
-    lastLogin: new Date(),
-  })
-
   return userCreds;
-}
+};
 
-export const googleSignIn = async() => {
+export const signInWithGoogle = async () => {
   const provider = new GoogleAuthProvider();
   const userCreds = await signInWithPopup(auth, provider);
 
-  // create/update user document
-  await createUserDocument(userCreds.user.uid, {
-    email: userCreds.user.email,
-    createdAt: new Date(),
-    lastLogin: new Date()
-  })
+  const now = new Date().toISOString();
 
+  // create/update user document
+  const userData: UserData = {
+    email: userCreds.user.email!,
+    displayName:
+      userCreds.user.displayName || userCreds.user.email!.split("@")[0],
+    createdAt: now,
+    lastLogin: now,
+  };
+
+  await createUserDocument(userCreds.user.uid, userData);
   return userCreds;
-}
+};
+
+export const signOutUser = async () => {
+  await signOut(auth);
+};

@@ -3,8 +3,9 @@ import { getUserDocument } from "@/lib/firestore";
 import { User } from "firebase/auth";
 import React from "react";
 
-interface UserData {
+export interface UserData {
   email: string;
+  displayName: string;
   createdAt: string;
   lastLogin: string;
 }
@@ -28,26 +29,26 @@ export function useAuth() {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = React.useState<User | null>(null);
-  const [userData, setUserData] = React.useState<UserData | null>(null)
+  const [userData, setUserData] = React.useState<UserData | null>(null);
   const [userLoggedIn, setUserLoggedIn] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        setCurrentUser(user)
-        setUserLoggedIn(true)
+        setCurrentUser(user);
+        setUserLoggedIn(true);
         // fetch user data from firestore
-        const data = await getUserDocument(user.uid)
-        setUserData(data as UserData)
+        const data = await getUserDocument(user.uid);
+        setUserData(data as UserData);
       } else {
-        setCurrentUser(null)
-        setUserLoggedIn(false)
+        setCurrentUser(null);
+        setUserLoggedIn(false);
       }
-      setLoading(false)
+      setLoading(false);
     });
 
-    return unsubscribe
+    return unsubscribe;
   }, []);
 
   const value: AuthContextType = {
