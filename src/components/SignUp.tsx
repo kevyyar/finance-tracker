@@ -38,8 +38,6 @@ export function SignUp() {
         createdAt: new Date(),
         lastLogin: new Date(),
       });
-
-      // Auth context will automatically update and redirect
     } catch (err: any) {
       setError(err.message);
     }

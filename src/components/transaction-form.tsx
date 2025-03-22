@@ -1,5 +1,17 @@
-import { useForm, Field } from "react-hook-form";
+import { transactionCategories } from "@/constants";
+import { useTransactions } from "@/contexts/transaction-context";
+import { transactionFormSchema } from "@/lib/schemas";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { ChangeEvent } from "react";
+import { useForm } from "react-hook-form";
+import { type z } from "zod";
+import { Button } from "./ui/button";
+import { Calendar } from "./ui/calendar";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
+import { Input } from "./ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import {
   Select,
   SelectContent,
@@ -7,28 +19,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { Input } from "./ui/input";
-import { z } from "zod";
-import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
-import { transactionCategories } from "@/constants";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "./ui/calendar";
-import { format } from "date-fns";
 
-const formSchema = z.object({
-  transactionType: z.string().min(1, "Transaction type is required"),
-  description: z.string().min(1, "Description is required"),
-  amount: z.number().min(1, "Amount is required"),
-  category: z.string().min(1, "Category is required"),
-  date: z.string().min(1, "Date is required"),
-});
+type FormData = z.infer<typeof transactionFormSchema>;
+
+interface FieldProps {
+  field: {
+    onChange: (e: string | ChangeEvent<HTMLInputElement>) => void;
+    value: string;
+  };
+}
+
+interface NumberFieldProps {
+  field: {
+    onChange: (value: number) => void;
+    value: number;
+  };
+}
 
 export default function TransactionForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const { addNewTransaction } = useTransactions();
+  const form = useForm<FormData>({
     defaultValues: {
-      transactionType: "",
+      transactionType: "expense",
       description: "",
       amount: 0,
       category: "",
@@ -36,9 +48,16 @@ export default function TransactionForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  const onSubmit = async (values: FormData) => {
+    await addNewTransaction(values);
+    form.reset({
+      transactionType: "expense",
+      description: "",
+      amount: 0,
+      category: "",
+      date: "",
+    });
+  };
 
   return (
     <Form {...form}>
@@ -50,13 +69,16 @@ export default function TransactionForm() {
         <FormField
           control={form.control}
           name="transactionType"
-          render={({ field }: Field) => (
+          render={({ field }: FieldProps) => (
             <FormItem>
               <FormLabel className="font-black">Transaction Type</FormLabel>
               <FormControl>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value || "expense"}
+                >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Expense" />
+                    <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent className="bg-white">
                     <SelectItem value="income">Income</SelectItem>
@@ -70,11 +92,15 @@ export default function TransactionForm() {
         <FormField
           control={form.control}
           name="description"
-          render={({ field }: Field) => (
+          render={({ field }: FieldProps) => (
             <FormItem>
               <FormLabel className="font-black">Description</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Description" />
+                <Input
+                  onChange={field.onChange}
+                  value={field.value}
+                  placeholder="Description"
+                />
               </FormControl>
             </FormItem>
           )}
@@ -82,11 +108,21 @@ export default function TransactionForm() {
         <FormField
           control={form.control}
           name="amount"
-          render={({ field }: Field) => (
+          render={({ field }: NumberFieldProps) => (
             <FormItem>
               <FormLabel className="font-black">Amount</FormLabel>
               <FormControl>
-                <Input type="number" {...field} placeholder="Amount" />
+                <Input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={field.value || ""}
+                  onChange={(e) => {
+                    const value = e.target.valueAsNumber;
+                    field.onChange(isNaN(value) ? 0 : value);
+                  }}
+                  placeholder="Amount"
+                />
               </FormControl>
             </FormItem>
           )}
@@ -94,7 +130,7 @@ export default function TransactionForm() {
         <FormField
           control={form.control}
           name="category"
-          render={({ field }: Field) => (
+          render={({ field }: FieldProps) => (
             <FormItem>
               <FormLabel className="font-black">Category</FormLabel>
               <FormControl>
@@ -117,7 +153,7 @@ export default function TransactionForm() {
         <FormField
           control={form.control}
           name="date"
-          render={({ field }: Field) => (
+          render={({ field }: FieldProps) => (
             <FormItem>
               <FormLabel className="font-black">Date</FormLabel>
               <FormControl>
@@ -127,7 +163,7 @@ export default function TransactionForm() {
                       variant={"outline"}
                       className={cn(
                         "w-full justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground",
+                        !field.value && "text-muted-foreground"
                       )}
                     >
                       <div className="flex items-center justify-between w-full">

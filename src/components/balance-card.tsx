@@ -18,12 +18,14 @@ const iconMap: Record<string, LucideIcon> = {
 
 export default function BalanceCard({
   title,
-  icon,
-  balance,
+  icon = "wallet",
+  balance = 0,
   balanceColor = "text-black",
   subtitle = "Current balance",
 }: BalanceCardType) {
   const IconComponent = iconMap[icon];
+  const displayBalance =
+    typeof balance === "number" && !isNaN(balance) ? balance : 0;
 
   return (
     <Card className="w-full border-gray-300 shadow-md">
@@ -38,7 +40,7 @@ export default function BalanceCard({
       </CardHeader>
       <CardContent>
         <p className={cn("text-4xl font-black", balanceColor)}>
-          ${balance.toFixed(2)}
+          ${displayBalance.toFixed(2)}
         </p>
       </CardContent>
       <CardFooter className="mt-[-20px]">

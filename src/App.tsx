@@ -6,15 +6,15 @@ import Header from "./components/header";
 import { SignIn } from "./components/SignIn";
 import { SignUp } from "./components/SignUp";
 import TransactionForm from "./components/transaction-form";
-import { financeData } from "./constants";
 import { useAuth } from "./contexts/auth-context";
+import { TransactionProvider } from "./contexts/transaction-context";
 
 function Dashboard() {
   return (
     <div className="container mx-auto p-10 font-nunito">
       <Header />
       <main className="flex flex-col gap-10">
-        <BalanceCardList balances={financeData} />
+        <BalanceCardList />
         <div className="flex flex-col gap-10 text-center md:text-left md:flex-row md:justify-between">
           <ExpenseChart />
           <TransactionForm />
@@ -33,30 +33,32 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            userLoggedIn ? (
-              <Navigate to="/dashboard" />
-            ) : (
-              <Navigate to="/signin" />
-            )
-          }
-        />
-        <Route
-          path="/signin"
-          element={userLoggedIn ? <Navigate to="/dashboard" /> : <SignIn />}
-        />
-        <Route
-          path="/signup"
-          element={userLoggedIn ? <Navigate to="/dashboard" /> : <SignUp />}
-        />
-        <Route
-          path="/dashboard"
-          element={userLoggedIn ? <Dashboard /> : <Navigate to="/signin" />}
-        />
-      </Routes>
+      <TransactionProvider>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              userLoggedIn ? (
+                <Navigate to="/dashboard" />
+              ) : (
+                <Navigate to="/signin" />
+              )
+            }
+          />
+          <Route
+            path="/signin"
+            element={userLoggedIn ? <Navigate to="/dashboard" /> : <SignIn />}
+          />
+          <Route
+            path="/signup"
+            element={userLoggedIn ? <Navigate to="/dashboard" /> : <SignUp />}
+          />
+          <Route
+            path="/dashboard"
+            element={userLoggedIn ? <Dashboard /> : <Navigate to="/signin" />}
+          />
+        </Routes>
+      </TransactionProvider>
     </BrowserRouter>
   );
 }

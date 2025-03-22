@@ -44,6 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         setCurrentUser(null);
         setUserLoggedIn(false);
+        setUserData(null);
       }
       setLoading(false);
     });

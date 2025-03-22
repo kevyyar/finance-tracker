@@ -1,24 +1,29 @@
-import { BalanceCardType } from "@/types";
 import BalanceCard from "./balance-card";
+import { useTransactions } from "@/contexts/transaction-context";
 
-export default function BalanceCardList({
-  balances,
-}: {
-  balances: BalanceCardType[];
-}) {
+export default function BalanceCardList() {
+  const { totalIncome, totalExpense, balance } = useTransactions();
+
   return (
-    <section className="flex flex-col gap-6 md:flex-row md:justify-center">
-      {balances.map((card: BalanceCardType) => (
-        <BalanceCard
-          id={card.id}
-          key={card.title}
-          title={card.title}
-          icon={card.icon}
-          balance={card.balance}
-          balanceColor={card.balanceColor}
-          subtitle={card.subtitle}
-        />
-      ))}
-    </section>
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <BalanceCard
+        title="Income"
+        icon="arrowUp"
+        balance={totalIncome}
+        balanceColor="text-green-500"
+      />
+      <BalanceCard
+        title="Expenses"
+        icon="arrowDown"
+        balance={totalExpense}
+        balanceColor="text-red-500"
+      />
+      <BalanceCard
+        title="Current Balance"
+        icon="wallet"
+        balance={balance}
+        balanceColor={balance >= 0 ? "text-green-500" : "text-red-500"}
+      />
+    </div>
   );
 }
