@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { signInWithGoogle } from "@/lib/auth";
 
 type FormData = z.infer<typeof transactionFormSchema>;
 
@@ -37,7 +38,7 @@ interface NumberFieldProps {
 }
 
 export default function TransactionForm() {
-  const { addNewTransaction } = useTransactions();
+  const { addNewTransaction, loading } = useTransactions();
   const form = useForm<FormData>({
     defaultValues: {
       transactionType: "expense",
@@ -163,7 +164,7 @@ export default function TransactionForm() {
                       variant={"outline"}
                       className={cn(
                         "w-full justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground"
+                        !field.value && "text-muted-foreground",
                       )}
                     >
                       <div className="flex items-center justify-between w-full">
@@ -191,8 +192,14 @@ export default function TransactionForm() {
             </FormItem>
           )}
         />
-        <Button className="bg-black text-white hover:bg-gray-800 transition-colors">
-          Add Transaction
+        <Button
+          className={cn(
+            "bg-black text-white hover:bg-gray-800 transition-colors",
+            loading ? "bg-gray-500" : "",
+          )}
+          disabled={loading}
+        >
+          {loading ? "Adding Transaction..." : "Add Transaction"}
         </Button>
       </form>
     </Form>

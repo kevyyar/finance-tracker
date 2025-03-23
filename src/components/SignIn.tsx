@@ -1,5 +1,6 @@
 "use client";
 
+import { signInWithGoogle } from "@/lib/auth";
 import { auth } from "@/lib/firebase";
 import { getUserDocument } from "@/lib/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -16,6 +17,7 @@ import {
 } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { ChromeIcon } from "lucide-react";
 
 export function SignIn() {
   const [email, setEmail] = useState("");
@@ -28,13 +30,18 @@ export function SignIn() {
       const userCredentials = await signInWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
 
       await getUserDocument(userCredentials.user.uid);
     } catch (err: any) {
       setError(err.message);
     }
+  };
+
+  const handleGoogleSignIn = (e: React.MouseEvent) => {
+    e.preventDefault();
+    signInWithGoogle();
   };
 
   return (
@@ -72,7 +79,15 @@ export function SignIn() {
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
             <Button type="submit" className="w-full">
-              Sign In
+              Sign In with your email
+            </Button>
+            <Button
+              type="button"
+              onClick={handleGoogleSignIn}
+              className="w-full"
+            >
+              <ChromeIcon className="mr-2 h-8 w-8" />
+              Sign in with Google
             </Button>
           </form>
         </CardContent>

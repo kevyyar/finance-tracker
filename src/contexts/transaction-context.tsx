@@ -73,26 +73,28 @@ export function TransactionProvider({
     fetchTransactions();
   }, [currentUser?.uid]);
 
-  const addNewTransaction = async (
-    transactionData: z.infer<typeof transactionSchema>
-  ) => {
-    if (!currentUser?.uid) return;
+    const addNewTransaction = async (
+      transactionData: z.infer<typeof transactionSchema>
+    ) => {
+      if (!currentUser?.uid) return;
+      setLoading(true);
+      const newTransaction: Transaction = {
+        ...transactionData,
+        id: crypto.randomUUID(),
+        userId: currentUser.uid,
+        timestamp: new Date().toISOString(),
+      };
 
-    const newTransaction: Transaction = {
-      ...transactionData,
-      id: crypto.randomUUID(),
-      userId: currentUser.uid,
-      timestamp: new Date().toISOString(),
+      try {
+        await addTransaction(newTransaction);
+        setTransactions((prev) => [...prev, newTransaction]);
+      } catch (error) {
+        console.error("Error adding transaction:", error);
+        throw error;
+      } finally {
+        setLoading(false);
+      }
     };
-
-    try {
-      await addTransaction(newTransaction);
-      setTransactions((prev) => [...prev, newTransaction]);
-    } catch (error) {
-      console.error("Error adding transaction:", error);
-      throw error;
-    }
-  };
 
   // Calculate totals
   const totalIncome = transactions

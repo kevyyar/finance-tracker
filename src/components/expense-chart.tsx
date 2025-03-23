@@ -71,7 +71,7 @@ export default function ExpenseChart() {
                       textAnchor="middle"
                       dominantBaseline="middle"
                     >
-                      <tspan className="fill-foreground text-3xl font-bold">
+                      <tspan className="fill-foreground text-xl font-bold">
                         ${totalExpense.toLocaleString()}
                       </tspan>
                       <tspan
