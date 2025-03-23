@@ -133,6 +133,11 @@ const transactionSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    clearTransactions: (state) => {
+      state.transactions = [];
+      state.loading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -180,7 +185,8 @@ const transactionSlice = createSlice({
 });
 
 // Export actions
-export const { setLoading, clearError } = transactionSlice.actions;
+export const { setLoading, clearError, clearTransactions } =
+  transactionSlice.actions;
 
 // Selectors
 export const selectTransactions = (state: RootState) =>

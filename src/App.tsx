@@ -15,8 +15,10 @@ import {
   setLoading,
   setUser,
 } from "./store/slices/authSlice";
-import { fetchTransactionsAsync } from "./store/slices/transactionSlice";
-import { Provider } from "react-redux";
+import {
+  clearTransactions,
+  fetchTransactionsAsync,
+} from "./store/slices/transactionSlice";
 
 function AuthMonitor({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();
@@ -28,6 +30,8 @@ function AuthMonitor({ children }: { children: React.ReactNode }) {
       if (user) {
         dispatch(fetchUserDataAsync(user.uid));
         dispatch(fetchTransactionsAsync(user.uid));
+      } else {
+        dispatch(clearTransactions());
       }
 
       dispatch(setLoading(false));

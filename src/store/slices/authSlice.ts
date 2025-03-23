@@ -125,7 +125,6 @@ export const signOutAsync = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await firebaseSignOut(auth);
-      return null;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -152,7 +151,7 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<User | null>) => {
       state.currentUser = action.payload;
-      state.userLoggedIn = !action.payload;
+      state.userLoggedIn = !!action.payload;
     },
     setUserData: (state, action: PayloadAction<UserData | null>) => {
       state.userData = action.payload;
