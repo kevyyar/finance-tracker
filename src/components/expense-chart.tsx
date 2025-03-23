@@ -4,7 +4,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useTransactions } from "@/contexts/transaction-context";
+import { useAppSelector } from "@/store";
+import {
+  selectChartData,
+  selectTotalExpense,
+} from "@/store/slices/transactionSlice";
 import React from "react";
 import { Label, Pie, PieChart } from "recharts";
 
@@ -17,7 +21,8 @@ const getColorIndex = (category: string) => {
 };
 
 export default function ExpenseChart() {
-  const { totalExpense, chartData } = useTransactions();
+  const totalExpense = useAppSelector(selectTotalExpense);
+  const chartData = useAppSelector(selectChartData);
 
   const chartConfig = React.useMemo(
     () => ({
@@ -29,10 +34,10 @@ export default function ExpenseChart() {
             label: category.charAt(0).toUpperCase() + category.slice(1),
           },
         }),
-        {}
+        {},
       ),
     }),
-    [chartData]
+    [chartData],
   );
 
   return (

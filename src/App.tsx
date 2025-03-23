@@ -6,9 +6,7 @@ import Header from "./components/header";
 import { SignIn } from "./components/SignIn";
 import { SignUp } from "./components/SignUp";
 import TransactionForm from "./components/transaction-form";
-import { useAuth } from "./contexts/auth-context";
-import { TransactionProvider } from "./contexts/transaction-context";
-import { useAppDispatch } from "./store";
+import { store, useAppDispatch, useAppSelector } from "./store";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./lib/firebase";
@@ -17,6 +15,8 @@ import {
   setLoading,
   setUser,
 } from "./store/slices/authSlice";
+import { fetchTransactionsAsync } from "./store/slices/transactionSlice";
+import { Provider } from "react-redux";
 
 function AuthMonitor({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();
@@ -27,6 +27,7 @@ function AuthMonitor({ children }: { children: React.ReactNode }) {
 
       if (user) {
         dispatch(fetchUserDataAsync(user.uid));
+        dispatch(fetchTransactionsAsync(user.uid));
       }
 
       dispatch(setLoading(false));
@@ -53,7 +54,7 @@ function Dashboard() {
 }
 
 function AppRoutes() {
-  const { userLoggedIn, loading } = useAuth();
+  const { userLoggedIn, loading } = useAppSelector((state) => state.auth);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -90,9 +91,7 @@ function App() {
   return (
     <BrowserRouter>
       <AuthMonitor>
-        <TransactionProvider>
-          <AppRoutes />
-        </TransactionProvider>
+        <AppRoutes />
       </AuthMonitor>
     </BrowserRouter>
   );

@@ -1,8 +1,15 @@
+import { useAppSelector } from "@/store";
 import BalanceCard from "./balance-card";
-import { useTransactions } from "@/contexts/transaction-context";
+import {
+  selectBalance,
+  selectTotalExpense,
+  selectTotalIncome,
+} from "@/store/slices/transactionSlice";
 
 export default function BalanceCardList() {
-  const { totalIncome, totalExpense, balance } = useTransactions();
+  const totalIncome = useAppSelector(selectTotalIncome);
+  const totalExpense = useAppSelector(selectTotalExpense);
+  const balance = useAppSelector(selectBalance);
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

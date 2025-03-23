@@ -20,6 +20,8 @@ import {
   SelectValue,
 } from "./ui/select";
 import { signInWithGoogle } from "@/lib/auth";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { addTransactionAsync } from "../store/slices/transactionSlice";
 
 type FormData = z.infer<typeof transactionFormSchema>;
 
@@ -38,7 +40,10 @@ interface NumberFieldProps {
 }
 
 export default function TransactionForm() {
-  const { addNewTransaction, loading } = useTransactions();
+  const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((state) => state.transactions);
+  const { currentUser } = useAppSelector((state) => state.auth);
+
   const form = useForm<FormData>({
     defaultValues: {
       transactionType: "expense",
@@ -50,7 +55,15 @@ export default function TransactionForm() {
   });
 
   const onSubmit = async (values: FormData) => {
-    await addNewTransaction(values);
+    if (!currentUser) return;
+
+    await dispatch(
+      addTransactionAsync({
+        userId: currentUser.uid,
+        transactionData: values,
+      }),
+    );
+
     form.reset({
       transactionType: "expense",
       description: "",

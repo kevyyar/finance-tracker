@@ -18,30 +18,25 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { ChromeIcon } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { signInAsync, signInWithGoogleAsync } from "@/store/slices/authSlice";
 
 export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+
+  const dispatch = useAppDispatch();
+
+  const { error, loading } = useAppSelector((state) => state.auth);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const userCredentials = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-
-      await getUserDocument(userCredentials.user.uid);
-    } catch (err: any) {
-      setError(err.message);
-    }
+    dispatch(signInAsync({ email, password }));
   };
 
   const handleGoogleSignIn = (e: React.MouseEvent) => {
     e.preventDefault();
-    signInWithGoogle();
+    dispatch(signInWithGoogleAsync());
   };
 
   return (
@@ -78,13 +73,14 @@ export function SignIn() {
               />
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
-            <Button type="submit" className="w-full">
-              Sign In with your email
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Signing in..." : "Sign in with your email"}
             </Button>
             <Button
               type="button"
               onClick={handleGoogleSignIn}
               className="w-full"
+              disabled={loading}
             >
               <ChromeIcon className="mr-2 h-8 w-8" />
               Sign in with Google

@@ -1,5 +1,3 @@
-import { useAuth } from "@/contexts/auth-context";
-import { signOutUser } from "@/lib/auth";
 import { useNavigate } from "react-router";
 import { Button } from "./ui/button";
 import { useAppDispatch, useAppSelector } from "@/store";

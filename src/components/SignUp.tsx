@@ -1,8 +1,5 @@
 "use client";
 
-import { auth } from "@/lib/firebase";
-import { createUserDocument } from "@/lib/firestore";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -16,31 +13,19 @@ import {
 } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { signUpAsync } from "@/store/slices/authSlice";
 
 export function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+
+  const dispatch = useAppDispatch();
+  const { error, loading } = useAppSelector((state) => state.auth);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-      // create a user document in firestore
-      await createUserDocument(userCredential.user.uid, {
-        email,
-        displayName: email.split("@")[0],
-        createdAt: new Date(),
-        lastLogin: new Date(),
-      });
-    } catch (err: any) {
-      setError(err.message);
-    }
+    dispatch(signUpAsync({ email, password }));
   };
 
   return (
@@ -75,8 +60,8 @@ export function SignUp() {
               />
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
-            <Button type="submit" className="w-full">
-              Sign Up
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Creating account..." : "Sign up"}
             </Button>
           </form>
         </CardContent>
