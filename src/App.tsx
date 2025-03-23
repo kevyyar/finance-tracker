@@ -8,6 +8,34 @@ import { SignUp } from "./components/SignUp";
 import TransactionForm from "./components/transaction-form";
 import { useAuth } from "./contexts/auth-context";
 import { TransactionProvider } from "./contexts/transaction-context";
+import { useAppDispatch } from "./store";
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./lib/firebase";
+import {
+  fetchUserDataAsync,
+  setLoading,
+  setUser,
+} from "./store/slices/authSlice";
+
+function AuthMonitor({ children }: { children: React.ReactNode }) {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      dispatch(setUser(user));
+
+      if (user) {
+        dispatch(fetchUserDataAsync(user.uid));
+      }
+
+      dispatch(setLoading(false));
+    });
+
+    return () => unsubscribe();
+  }, [dispatch]);
+  return <>{children}</>;
+}
 
 function Dashboard() {
   return (
@@ -24,41 +52,48 @@ function Dashboard() {
   );
 }
 
-function App() {
+function AppRoutes() {
   const { userLoggedIn, loading } = useAuth();
 
   if (loading) {
     return <div>Loading...</div>;
   }
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          userLoggedIn ? (
+            <Navigate to="/dashboard" />
+          ) : (
+            <Navigate to="/signin" />
+          )
+        }
+      />
+      <Route
+        path="/signin"
+        element={userLoggedIn ? <Navigate to="/dashboard" /> : <SignIn />}
+      />
+      <Route
+        path="/signup"
+        element={userLoggedIn ? <Navigate to="/dashboard" /> : <SignUp />}
+      />
+      <Route
+        path="/dashboard"
+        element={userLoggedIn ? <Dashboard /> : <Navigate to="/signin" />}
+      />
+    </Routes>
+  );
+}
 
+function App() {
   return (
     <BrowserRouter>
-      <TransactionProvider>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              userLoggedIn ? (
-                <Navigate to="/dashboard" />
-              ) : (
-                <Navigate to="/signin" />
-              )
-            }
-          />
-          <Route
-            path="/signin"
-            element={userLoggedIn ? <Navigate to="/dashboard" /> : <SignIn />}
-          />
-          <Route
-            path="/signup"
-            element={userLoggedIn ? <Navigate to="/dashboard" /> : <SignUp />}
-          />
-          <Route
-            path="/dashboard"
-            element={userLoggedIn ? <Dashboard /> : <Navigate to="/signin" />}
-          />
-        </Routes>
-      </TransactionProvider>
+      <AuthMonitor>
+        <TransactionProvider>
+          <AppRoutes />
+        </TransactionProvider>
+      </AuthMonitor>
     </BrowserRouter>
   );
 }

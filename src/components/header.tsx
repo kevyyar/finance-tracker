@@ -2,14 +2,16 @@ import { useAuth } from "@/contexts/auth-context";
 import { signOutUser } from "@/lib/auth";
 import { useNavigate } from "react-router";
 import { Button } from "./ui/button";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { signOutAsync } from "@/store/slices/authSlice";
 
 export default function Header() {
-  const { userData } = useAuth();
-
+  const { userData } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
-    await signOutUser();
+    await dispatch(signOutAsync());
     navigate("/");
   };
 
