@@ -1,14 +1,14 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { auth } from "@/lib/firebase";
+import { createUserDocument, getUserDocument } from "@/lib/firestore";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
   GoogleAuthProvider,
+  signInWithEmailAndPassword,
   signInWithPopup,
   User,
 } from "firebase/auth";
-import { createUserDocument, getUserDocument } from "@/lib/firestore";
 
 export interface UserData {
   email: string;
@@ -21,7 +21,7 @@ export interface UserData {
 interface AuthState {
   currentUser: User | null;
   userData: UserData | null;
-  userLoggedIn: boolean;
+  userLoggedIn: boolean | null;
   loading: boolean;
   error: string | null;
 }
@@ -30,7 +30,7 @@ interface AuthState {
 const initialState: AuthState = {
   currentUser: null,
   userData: null,
-  userLoggedIn: false,
+  userLoggedIn: null,
   loading: false,
   error: null,
 };

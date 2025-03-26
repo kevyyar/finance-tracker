@@ -1,29 +1,27 @@
 import { transactionCategories } from "@/constants";
-import { useTransactions } from "@/contexts/transaction-context";
-import { transactionFormSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
+import { FormData } from "@/types";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { ChangeEvent } from "react";
-import { useForm } from "react-hook-form";
-import { type z } from "zod";
-import { Button } from "./ui/button";
-import { Calendar } from "./ui/calendar";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
-import { Input } from "./ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { useFormContext } from "react-hook-form";
+import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import { Input } from "../ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { signInWithGoogle } from "@/lib/auth";
-import { useAppDispatch, useAppSelector } from "@/store";
-import { addTransactionAsync } from "../store/slices/transactionSlice";
+} from "../ui/select";
 
-type FormData = z.infer<typeof transactionFormSchema>;
+interface TransactionFormUIProps {
+  onSubmit: (data: FormData) => Promise<void>;
+  loading: boolean;
+}
 
 interface FieldProps {
   field: {
@@ -39,40 +37,12 @@ interface NumberFieldProps {
   };
 }
 
-export default function TransactionForm() {
-  const dispatch = useAppDispatch();
-  const { loading } = useAppSelector((state) => state.transactions);
-  const { currentUser } = useAppSelector((state) => state.auth);
 
-  const form = useForm<FormData>({
-    defaultValues: {
-      transactionType: "expense",
-      description: "",
-      amount: 0,
-      category: "",
-      date: "",
-    },
-  });
-
-  const onSubmit = async (values: FormData) => {
-    if (!currentUser) return;
-
-    await dispatch(
-      addTransactionAsync({
-        userId: currentUser.uid,
-        transactionData: values,
-      }),
-    );
-
-    form.reset({
-      transactionType: "expense",
-      description: "",
-      amount: 0,
-      category: "",
-      date: "",
-    });
-  };
-
+export default function TransactionFormUI({
+  onSubmit,
+  loading,
+}: TransactionFormUIProps) {
+  const form = useFormContext<FormData>();
   return (
     <Form {...form}>
       <form
@@ -111,7 +81,7 @@ export default function TransactionForm() {
               <FormLabel className="font-black">Description</FormLabel>
               <FormControl>
                 <Input
-                  onChange={field.onChange}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => field.onChange(e.target.value)}
                   value={field.value}
                   placeholder="Description"
                 />
@@ -131,7 +101,7 @@ export default function TransactionForm() {
                   min="0"
                   step="0.01"
                   value={field.value || ""}
-                  onChange={(e) => {
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     const value = e.target.valueAsNumber;
                     field.onChange(isNaN(value) ? 0 : value);
                   }}
@@ -194,7 +164,7 @@ export default function TransactionForm() {
                     <Calendar
                       mode="single"
                       selected={field.value ? new Date(field.value) : undefined}
-                      onSelect={(date) => {
+                      onSelect={(date: Date | undefined) => {
                         field.onChange(date ? date.toISOString() : "");
                       }}
                       initialFocus

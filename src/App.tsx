@@ -1,3 +1,5 @@
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import BalanceCardList from "./components/balance-card-list";
@@ -5,11 +7,9 @@ import ExpenseChart from "./components/expense-chart";
 import Header from "./components/header";
 import { SignIn } from "./components/SignIn";
 import { SignUp } from "./components/SignUp";
-import TransactionForm from "./components/transaction-form";
-import { store, useAppDispatch, useAppSelector } from "./store";
-import { useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import TransactionFormContainer from "./components/transaction-form/form-container";
 import { auth } from "./lib/firebase";
+import { useAppDispatch, useAppSelector } from "./store";
 import {
   fetchUserDataAsync,
   setLoading,
@@ -50,7 +50,7 @@ function Dashboard() {
         <BalanceCardList />
         <div className="flex flex-col gap-10 text-center md:text-left md:flex-row md:justify-between">
           <ExpenseChart />
-          <TransactionForm />
+          <TransactionFormContainer />
         </div>
       </main>
     </div>
@@ -60,9 +60,10 @@ function Dashboard() {
 function AppRoutes() {
   const { userLoggedIn, loading } = useAppSelector((state) => state.auth);
 
-  if (loading) {
+  if (loading || userLoggedIn === null) {
     return <div>Loading...</div>;
   }
+
   return (
     <Routes>
       <Route
