@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/core/hooks/useRedux";
 import { addTransactionAsync } from "@/store/slices/transactionSlice";
 import { FormData } from '@/types';
 import { FormProvider, useForm } from "react-hook-form";

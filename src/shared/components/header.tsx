@@ -1,7 +1,7 @@
+import { useAppDispatch, useAppSelector } from "@/core/hooks/useRedux";
+import { signOutAsync } from "@/store/slices/authSlice";
 import { useNavigate } from "react-router";
 import { Button } from "./ui/button";
-import { useAppDispatch, useAppSelector } from "@/store";
-import { signOutAsync } from "@/store/slices/authSlice";
 
 export default function Header() {
   const { userData } = useAppSelector((state) => state.auth);

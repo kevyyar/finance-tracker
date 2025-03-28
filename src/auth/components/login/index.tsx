@@ -1,3 +1,4 @@
+import { useAppDispatch, useAppSelector } from "@/core/hooks/useRedux";
 import {
   Card,
   CardContent,
@@ -9,7 +10,6 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { useAppDispatch, useAppSelector } from "@/store";
 import { signInAsync, signInWithGoogleAsync } from "@/store/slices/authSlice";
 import { ChromeIcon } from "lucide-react";
 import { useState } from "react";

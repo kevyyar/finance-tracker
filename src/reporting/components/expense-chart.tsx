@@ -1,10 +1,10 @@
+import { useAppSelector } from "@/core/hooks/useRedux";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/shared/components/ui/chart";
-import { useAppSelector } from "@/store";
 import {
   selectChartData,
   selectTotalExpense,

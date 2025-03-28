@@ -1,3 +1,4 @@
+import { useAppDispatch, useAppSelector } from "@/core/hooks/useRedux";
 import { Button } from "@/shared/components/ui/button";
 import {
   Card,
@@ -9,7 +10,6 @@ import {
 } from "@/shared/components/ui/card";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { useAppDispatch, useAppSelector } from "@/store";
 import { signUpAsync } from "@/store/slices/authSlice";
 import { useState } from "react";
 import { Link } from "react-router-dom";

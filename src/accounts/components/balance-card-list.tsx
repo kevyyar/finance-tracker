@@ -1,10 +1,10 @@
-import { useAppSelector } from "@/store";
-import BalanceCard from "./balance-card";
+import { useAppSelector } from "@/core/hooks/useRedux";
 import {
   selectBalance,
   selectTotalExpense,
   selectTotalIncome,
 } from "@/store/slices/transactionSlice";
+import BalanceCard from "./balance-card";
 
 export default function BalanceCardList() {
   const totalIncome = useAppSelector(selectTotalIncome);
