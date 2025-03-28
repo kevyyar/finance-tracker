@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store";
+import { addTransactionAsync } from "@/store/slices/transactionSlice";
 import { FormData } from '@/types';
 import { FormProvider, useForm } from "react-hook-form";
-import { addTransactionAsync } from "../../store/slices/transactionSlice";
 import TransactionFormUI from "./form-ui";
 
 export default function TransactionFormContainer() {

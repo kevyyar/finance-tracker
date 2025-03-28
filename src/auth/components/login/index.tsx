@@ -1,12 +1,3 @@
-"use client";
-
-import { signInWithGoogle } from "@/lib/auth";
-import { auth } from "@/lib/firebase";
-import { getUserDocument } from "@/lib/firestore";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Button } from "./ui/button";
 import {
   Card,
   CardContent,
@@ -14,14 +5,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { ChromeIcon } from "lucide-react";
+} from "@/shared/components/ui//card";
+import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
+import { Label } from "@/shared/components/ui/label";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { signInAsync, signInWithGoogleAsync } from "@/store/slices/authSlice";
+import { ChromeIcon } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
-export function SignIn() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

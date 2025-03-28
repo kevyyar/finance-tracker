@@ -1,24 +1,24 @@
-import { onAuthStateChanged } from "firebase/auth";
-import { useEffect } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import "./App.css";
-import BalanceCardList from "./components/balance-card-list";
-import ExpenseChart from "./components/expense-chart";
-import Header from "./components/header";
-import { SignIn } from "./components/SignIn";
-import { SignUp } from "./components/SignUp";
-import TransactionFormContainer from "./components/transaction-form/form-container";
-import { auth } from "./lib/firebase";
-import { useAppDispatch, useAppSelector } from "./store";
+import BalanceCardList from "@/accounts/components/balance-card-list";
+import SignIn from "@/auth/components/login";
+import SignUp from "@/auth/components/register";
+import { auth } from "@/lib/firebase";
+import ExpenseChart from "@/reporting/components/expense-chart";
+import Header from "@/shared/components/header";
+import { useAppDispatch, useAppSelector } from "@/store";
 import {
   fetchUserDataAsync,
   setLoading,
   setUser,
-} from "./store/slices/authSlice";
+} from "@/store/slices/authSlice";
 import {
   clearTransactions,
   fetchTransactionsAsync,
-} from "./store/slices/transactionSlice";
+} from "@/store/slices/transactionSlice";
+import TransactionFormContainer from "@/transactions/components/transaction-form/form-container";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import "./App.css";
 
 function AuthMonitor({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();

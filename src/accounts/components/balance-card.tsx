@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -5,8 +6,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+} from "@/shared/components/ui/card";
 import { BalanceCardType } from "@/types";
 import { ArrowDown, ArrowUp, LucideIcon, Wallet } from "lucide-react";
 

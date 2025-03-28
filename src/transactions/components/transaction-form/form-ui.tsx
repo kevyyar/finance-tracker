@@ -1,22 +1,22 @@
 import { transactionCategories } from "@/constants";
 import { cn } from "@/lib/utils";
-import { FormData } from "@/types";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { ChangeEvent } from "react";
-import { useFormContext } from "react-hook-form";
-import { Button } from "../ui/button";
-import { Calendar } from "../ui/calendar";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
-import { Input } from "../ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "@/shared/components/ui/button";
+import { Calendar } from "@/shared/components/ui/calendar";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/shared/components/ui/select";
+import { FormData } from "@/types";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { ChangeEvent } from "react";
+import { useFormContext } from "react-hook-form";
 
 interface TransactionFormUIProps {
   onSubmit: (data: FormData) => Promise<void>;
