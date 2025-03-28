@@ -1,6 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@/core/hooks/useRedux";
+import { transactionFormSchema } from "@/lib/schemas"; // Import schema
 import { addTransactionAsync } from "@/store/slices/transactionSlice";
-import { FormData } from '@/types';
+import { FormData } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import TransactionFormUI from "./form-ui";
 
@@ -10,6 +12,7 @@ export default function TransactionFormContainer() {
   const { currentUser } = useAppSelector((state) => state.auth);
 
   const form = useForm<FormData>({
+    resolver: zodResolver(transactionFormSchema),
     defaultValues: {
       transactionType: "expense",
       description: "",

@@ -2,7 +2,7 @@ import { transactionCategories } from "@/constants";
 import { cn } from "@/lib/utils";
 import { Button } from "@/shared/components/ui/button";
 import { Calendar } from "@/shared/components/ui/calendar";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/shared/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import {
@@ -43,6 +43,8 @@ export default function TransactionFormUI({
   loading,
 }: TransactionFormUIProps) {
   const form = useFormContext<FormData>();
+  const { errors } = form.formState;
+
   return (
     <Form {...form}>
       <form
@@ -86,6 +88,7 @@ export default function TransactionFormUI({
                   placeholder="Description"
                 />
               </FormControl>
+              <FormMessage className="text-red-500">{errors.description?.message}</FormMessage> 
             </FormItem>
           )}
         />
@@ -108,6 +111,7 @@ export default function TransactionFormUI({
                   placeholder="Amount"
                 />
               </FormControl>
+              <FormMessage className="text-red-500">{errors.amount?.message}</FormMessage>
             </FormItem>
           )}
         />
@@ -131,6 +135,7 @@ export default function TransactionFormUI({
                   </SelectContent>
                 </Select>
               </FormControl>
+              <FormMessage className="text-red-500">{errors.category?.message}</FormMessage>
             </FormItem>
           )}
         />
@@ -172,6 +177,7 @@ export default function TransactionFormUI({
                   </PopoverContent>
                 </Popover>
               </FormControl>
+              <FormMessage className="text-red-500">{errors.date?.message}</FormMessage> 
             </FormItem>
           )}
         />
